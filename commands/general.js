@@ -132,11 +132,21 @@ const generalCommands = {
             const memberAirlines = await Airline.getAll();
             
             if (memberAirlines.length === 0) {
+                // Show all airlines from data file
+                const allAirlines = Object.values(airlines);
                 const embed = createEmbed()
-                    .setTitle('✈️ Member Airlines')
-                    .setDescription('No member airlines registered yet.')
-                    .setColor('#F59E0B');
+                    .setTitle('✈️ Star Alliance Member Airlines')
+                    .setDescription('Our prestigious member carriers around the world');
                 
+                allAirlines.forEach(airline => {
+                    embed.addFields({
+                        name: `${airline.name} (${airline.iata})`,
+                        value: `**Hub:** ${airline.hub}\n**Description:** ${airline.description}`,
+                        inline: true
+                    });
+                });
+                
+                embed.setFooter({ text: `${Object.keys(airlines).length} total airlines available` });
                 return await message.reply({ embeds: [embed] });
             }
             

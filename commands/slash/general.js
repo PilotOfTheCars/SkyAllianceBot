@@ -128,13 +128,13 @@ const slashGeneralCommands = [
             const memberAirlines = await Airline.getAll();
             
             if (memberAirlines.length === 0) {
-                // Show default airlines from data file
-                const defaultAirlines = Object.values(airlines).slice(0, 10);
+                // Show all airlines from data file
+                const allAirlines = Object.values(airlines);
                 const embed = createEmbed()
-                    .setTitle('✈️ Sky Alliance Member Airlines')
+                    .setTitle('✈️ Star Alliance Member Airlines')
                     .setDescription('Our prestigious member carriers around the world');
                 
-                defaultAirlines.forEach(airline => {
+                allAirlines.forEach(airline => {
                     embed.addFields({
                         name: `${airline.name} (${airline.iata})`,
                         value: `**Hub:** ${airline.hub}\n**Description:** ${airline.description}`,

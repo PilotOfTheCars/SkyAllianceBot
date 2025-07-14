@@ -234,25 +234,45 @@ const slashAdminCommands = [
             });
             
             const embed = createEmbed()
-                .setTitle('📢 Sky Alliance Announcement')
+                .setTitle('📢 OFFICIAL SKY ALLIANCE ANNOUNCEMENT')
                 .setDescription(announcement)
-                .addFields({
-                    name: 'Announced by',
-                    value: interaction.user.username,
-                    inline: true
-                })
-                .setFooter({ text: 'Sky Alliance • Official Announcement' });
+                .addFields(
+                    {
+                        name: '👤 Announced by',
+                        value: interaction.user.username,
+                        inline: true
+                    },
+                    {
+                        name: '📅 Date',
+                        value: new Date().toLocaleDateString('en-US', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        }),
+                        inline: true
+                    },
+                    {
+                        name: '🏢 Authority',
+                        value: 'Sky Alliance Administration',
+                        inline: true
+                    }
+                )
+                .setColor('#3B82F6')
+                .setThumbnail(config.logos.main)
+                .setFooter({ text: 'Sky Alliance • Official Communication • The World\'s Leading Virtual Airline Alliance' });
             
-            // Try to send to announcements channel
-            const announcementChannel = interaction.guild.channels.cache.find(
-                channel => channel.name === config.channels.announcements
-            );
+            // Send to specific announcement channel
+            const announcementChannel = interaction.guild.channels.cache.get('1394220009001193595');
             
             if (announcementChannel) {
-                await announcementChannel.send({ embeds: [embed] });
-                await interaction.reply({ content: '✅ Announcement posted successfully!', ephemeral: true });
+                await announcementChannel.send({ 
+                    content: '@everyone', 
+                    embeds: [embed] 
+                });
+                await interaction.reply({ content: '✅ Official announcement posted successfully!', ephemeral: true });
             } else {
-                await interaction.reply({ embeds: [embed] });
+                await interaction.reply({ content: '❌ Could not find the official announcement channel. Please check channel permissions.', ephemeral: true });
             }
         }
     },

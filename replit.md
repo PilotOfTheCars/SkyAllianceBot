@@ -9,6 +9,7 @@ This project is a Discord bot for the Sky Alliance virtual airline alliance in G
 Preferred communication style: Simple, everyday language.
 Data preferences: Include comprehensive airline data - all major Sky Alliance members.
 Interface preferences: Supports both prefix commands (!help) and modern slash commands (/help).
+Channel preferences: Official announcements go to channel 1394220009001193595 with formal formatting.
 
 ## System Architecture
 

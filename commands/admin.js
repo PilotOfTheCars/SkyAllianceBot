@@ -263,7 +263,7 @@ const adminCommands = {
                     .setDescription('Please provide an announcement message.')
                     .addFields({
                         name: 'Usage',
-                        value: '`!announce Welcome to Sky Alliance!`',
+                        value: '`!announce Welcome to Star Alliance!`',
                         inline: false
                     })
                     .setColor('#EF4444');
@@ -281,7 +281,7 @@ const adminCommands = {
             });
             
             const embed = createEmbed()
-                .setTitle('📢 OFFICIAL SKY ALLIANCE ANNOUNCEMENT')
+                .setTitle('📢 OFFICIAL STAR ALLIANCE ANNOUNCEMENT')
                 .setDescription(announcement)
                 .addFields(
                     {
@@ -301,7 +301,7 @@ const adminCommands = {
                     },
                     {
                         name: '🏢 Authority',
-                        value: 'Sky Alliance Administration',
+                        value: 'Star Alliance Administration',
                         inline: true
                     }
                 )

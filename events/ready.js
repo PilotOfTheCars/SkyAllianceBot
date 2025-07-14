@@ -5,12 +5,12 @@ module.exports = {
     name: 'ready',
     once: true,
     async execute(client) {
-        console.log(`✅ Sky Alliance Bot is ready! Logged in as ${client.user.tag}`);
+        console.log(`✅ Star Alliance Bot is ready! Logged in as ${client.user.tag}`);
         console.log(`📊 Serving ${client.guilds.cache.size} servers`);
         console.log(`👥 Monitoring ${client.users.cache.size} users`);
         
         // Set bot activity
-        client.user.setActivity('Sky Alliance Operations', { type: 'WATCHING' });
+        client.user.setActivity('Star Alliance Operations', { type: 'WATCHING' });
         
         // Log some statistics
         try {
@@ -20,6 +20,6 @@ module.exports = {
             console.error('Error fetching user statistics:', error);
         }
         
-        console.log('🛩️ Sky Alliance Bot fully initialized!');
+        console.log('🛩️ Star Alliance Bot fully initialized!');
     }
 };

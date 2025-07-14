@@ -11,12 +11,12 @@ const slashGeneralCommands = [
             .setDescription('Display all available commands'),
         async execute(interaction) {
             const embed = createEmbed()
-                .setTitle('🛩️ Sky Alliance Commands')
+                .setTitle('🛩️ Star Alliance Commands')
                 .setDescription('The World\'s Leading Virtual Airline Alliance in GeoFS')
                 .addFields(
                     {
                         name: '📋 General Commands',
-                        value: '`/help` - Show this help menu\n`/info` - Alliance information\n`/apply` - Apply to join the alliance\n`/rules` - View alliance rules\n`/airlines` - List member airlines\n`/members` - Show alliance members\n`/hubs` - List alliance hubs\n`/events` - Upcoming events\n`/livery` - Sky Alliance livery info\n`/codeshares` - View codeshare routes\n`/flight` - Flight information\n`/news` - Latest alliance news\n`/mission` - Current alliance mission',
+                        value: '`/help` - Show this help menu\n`/info` - Alliance information\n`/apply` - Apply to join the alliance\n`/rules` - View alliance rules\n`/airlines` - List member airlines\n`/members` - Show alliance members\n`/hubs` - List alliance hubs\n`/events` - Upcoming events\n`/livery` - Star Alliance livery info\n`/codeshares` - View codeshare routes\n`/flight` - Flight information\n`/news` - Latest alliance news\n`/mission` - Current alliance mission',
                         inline: true
                     },
                     {
@@ -30,7 +30,7 @@ const slashGeneralCommands = [
                         inline: true
                     }
                 )
-                .setFooter({ text: 'Sky Alliance • The World\'s Leading Virtual Airline Alliance' });
+                .setFooter({ text: 'Star Alliance • The World\'s Leading Virtual Airline Alliance' });
             
             await interaction.reply({ embeds: [embed] });
         }
@@ -38,15 +38,15 @@ const slashGeneralCommands = [
     {
         data: new SlashCommandBuilder()
             .setName('info')
-            .setDescription('Display Sky Alliance information'),
+            .setDescription('Display Star Alliance information'),
         async execute(interaction) {
             const embed = createEmbed()
-                .setTitle('🌐 Sky Alliance')
+                .setTitle('🌐 Star Alliance')
                 .setDescription('The World\'s Leading Virtual Airline Alliance in GeoFS')
                 .addFields(
                     {
                         name: '✈️ About Us',
-                        value: 'Sky Alliance is a global partnership of the most professional and realistic virtual airlines in GeoFS. Modeled after the real-world Star Alliance, we bring together diverse carriers from around the globe to offer a seamless, interconnected aviation experience.',
+                        value: 'Star Alliance is a global partnership of the most professional and realistic virtual airlines in GeoFS. Modeled after the real-world Star Alliance, we bring together diverse carriers from around the globe to offer a seamless, interconnected aviation experience.',
                         inline: false
                     },
                     {
@@ -56,7 +56,7 @@ const slashGeneralCommands = [
                     },
                     {
                         name: '🏢 What We Offer',
-                        value: '• Alliance-Wide Codeshares\n• Sky Alliance Livery Program\n• Joint Events & Airshows\n• Sky XP Program\n• Shared Hubs & Virtual Lounges\n• Professional Standards',
+                        value: '• Alliance-Wide Codeshares\n• Star Alliance Livery Program\n• Joint Events & Airshows\n• Star XP Program\n• Shared Hubs & Virtual Lounges\n• Professional Standards',
                         inline: false
                     }
                 )
@@ -68,20 +68,20 @@ const slashGeneralCommands = [
     {
         data: new SlashCommandBuilder()
             .setName('apply')
-            .setDescription('Apply to join Sky Alliance'),
+            .setDescription('Apply to join Star Alliance'),
         async execute(interaction) {
             const embed = createEmbed()
-                .setTitle('📝 Apply to Sky Alliance')
+                .setTitle('📝 Apply to Star Alliance')
                 .setDescription('Ready to join the world\'s most prestigious virtual airline alliance?')
                 .addFields(
                     {
                         name: '📋 Application Requirements',
-                        value: '• Professional airline name and branding\n• Valid IATA/ICAO codes (if applicable)\n• Commitment to realistic operations\n• Active participation in alliance events\n• Adherence to Sky Alliance standards',
+                        value: '• Professional airline name and branding\n• Valid IATA/ICAO codes (if applicable)\n• Commitment to realistic operations\n• Active participation in alliance events\n• Adherence to Star Alliance standards',
                         inline: false
                     },
                     {
                         name: '📬 How to Apply',
-                        value: 'Send a direct message to any Sky Alliance administrator with:\n• Your airline name\n• IATA/ICAO codes\n• Brief description of your airline\n• Why you want to join Sky Alliance',
+                        value: 'Send a direct message to any Star Alliance administrator with:\n• Your airline name\n• IATA/ICAO codes\n• Brief description of your airline\n• Why you want to join Star Alliance',
                         inline: false
                     }
                 )
@@ -96,7 +96,7 @@ const slashGeneralCommands = [
             .setDescription('Display alliance rules'),
         async execute(interaction) {
             const embed = createEmbed()
-                .setTitle('📜 Sky Alliance Rules')
+                .setTitle('📜 Star Alliance Rules')
                 .setDescription('Professional standards for all member airlines')
                 .addFields(
                     {
@@ -179,7 +179,7 @@ const slashGeneralCommands = [
             }
             
             const embed = createEmbed()
-                .setTitle('👥 Sky Alliance Members')
+                .setTitle('👥 Star Alliance Members')
                 .setDescription('Our dedicated pilots and crew members');
             
             const memberList = members.slice(0, 20).map((member, index) => {
@@ -205,7 +205,7 @@ const slashGeneralCommands = [
             const allianceHubs = await Hub.getAll();
             
             const embed = createEmbed()
-                .setTitle('🏢 Sky Alliance Hubs')
+                .setTitle('🏢 Star Alliance Hubs')
                 .setDescription('Our shared international airport hubs worldwide');
             
             if (allianceHubs.length === 0) {
@@ -278,15 +278,15 @@ const slashGeneralCommands = [
     {
         data: new SlashCommandBuilder()
             .setName('livery')
-            .setDescription('Sky Alliance livery information'),
+            .setDescription('Star Alliance livery information'),
         async execute(interaction) {
             const embed = createEmbed()
-                .setTitle('🎨 Sky Alliance Livery Program')
-                .setDescription('One aircraft from each member airline painted in official Sky Alliance livery')
+                .setTitle('🎨 Star Alliance Livery Program')
+                .setDescription('One aircraft from each member airline painted in official Star Alliance livery')
                 .addFields(
                     {
                         name: '✈️ Livery Requirements',
-                        value: '• Official Sky Alliance color scheme\n• Alliance logo placement\n• Member airline identification\n• Professional appearance standards',
+                        value: '• Official Star Alliance color scheme\n• Alliance logo placement\n• Member airline identification\n• Professional appearance standards',
                         inline: false
                     },
                     {
@@ -370,7 +370,7 @@ const slashGeneralCommands = [
             const latestNews = await News.getLatest(5);
             
             const embed = createEmbed()
-                .setTitle('📰 Sky Alliance News')
+                .setTitle('📰 Star Alliance News')
                 .setDescription('Latest updates and announcements');
             
             if (latestNews.length === 0) {
@@ -395,7 +395,7 @@ const slashGeneralCommands = [
                 });
             }
             
-            embed.setFooter({ text: 'Stay updated with Sky Alliance developments' });
+            embed.setFooter({ text: 'Stay updated with Star Alliance developments' });
             await interaction.reply({ embeds: [embed] });
         }
     },
@@ -405,7 +405,7 @@ const slashGeneralCommands = [
             .setDescription('Current alliance mission'),
         async execute(interaction) {
             const embed = createEmbed()
-                .setTitle('🎯 Sky Alliance Mission')
+                .setTitle('🎯 Star Alliance Mission')
                 .setDescription('Our current objectives and goals')
                 .addFields(
                     {

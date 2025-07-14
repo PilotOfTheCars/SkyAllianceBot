@@ -8,7 +8,7 @@ app.get('/auth/discord/callback', (req, res) => {
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Sky Alliance Bot - Authorization</title>
+            <title>Star Alliance Bot - Authorization</title>
             <style>
                 body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #2c3e50; color: white; }
                 .container { max-width: 600px; margin: 0 auto; }
@@ -18,10 +18,10 @@ app.get('/auth/discord/callback', (req, res) => {
         </head>
         <body>
             <div class="container">
-                <h1>🛩️ Sky Alliance Bot</h1>
+                <h1>🛩️ Star Alliance Bot</h1>
                 <div class="success">
                     <h2>Authorization Successful!</h2>
-                    <p>The Sky Alliance Discord bot has been successfully authorized.</p>
+                    <p>The Star Alliance Discord bot has been successfully authorized.</p>
                     <p>You can now close this window and return to Discord.</p>
                 </div>
                 <p><em>The World's Leading Virtual Airline Alliance in GeoFS</em></p>
@@ -33,7 +33,7 @@ app.get('/auth/discord/callback', (req, res) => {
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-    res.json({ status: 'OK', service: 'Sky Alliance Bot' });
+    res.json({ status: 'OK', service: 'Star Alliance Bot' });
 });
 
 // Root endpoint
@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Sky Alliance Bot</title>
+            <title>Star Alliance Bot</title>
             <style>
                 body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #2c3e50; color: white; }
                 .container { max-width: 600px; margin: 0 auto; }
@@ -52,10 +52,10 @@ app.get('/', (req, res) => {
         </head>
         <body>
             <div class="container">
-                <h1>🛩️ Sky Alliance Discord Bot</h1>
+                <h1>🛩️ Star Alliance Discord Bot</h1>
                 <div class="info">
                     <h2>Bot Status: Online</h2>
-                    <p>The Sky Alliance Discord bot is running and ready to serve your virtual airline alliance.</p>
+                    <p>The Star Alliance Discord bot is running and ready to serve your virtual airline alliance.</p>
                 </div>
                 <p><em>The World's Leading Virtual Airline Alliance in GeoFS</em></p>
             </div>
@@ -65,7 +65,7 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Sky Alliance Bot web server running on port ${port}`);
+    console.log(`Star Alliance Bot web server running on port ${port}`);
 });
 
 module.exports = app;

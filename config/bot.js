@@ -8,9 +8,9 @@ const config = {
         info: '#6B7280'
     },
     roles: {
-        admin: 'Sky Alliance Admin',
-        member: 'Sky Alliance Member',
-        pilot: 'Sky Alliance Pilot'
+        admin: 'Star Alliance Admin',
+        member: 'Star Alliance Member',
+        pilot: 'Star Alliance Pilot'
     },
     channels: {
         applications: 'applications',
@@ -24,8 +24,8 @@ const config = {
         levelMultiplier: 100
     },
     logos: {
-        main: 'https://cdn.discordapp.com/attachments/your-channel/skyalliance-logo.png',
-        star: 'https://cdn.discordapp.com/attachments/your-channel/skyalliance-star.png'
+        main: 'https://cdn.discordapp.com/attachments/your-channel/staralliance-logo.png',
+        star: 'https://cdn.discordapp.com/attachments/your-channel/staralliance-star.png'
     }
 };
 

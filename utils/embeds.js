@@ -1,13 +1,13 @@
 const { EmbedBuilder } = require('discord.js');
 const config = require('../config/bot');
 
-// Create a standardized embed with Sky Alliance branding
+// Create a standardized embed with Star Alliance branding
 function createEmbed() {
     return new EmbedBuilder()
         .setColor(config.colors.primary)
         .setTimestamp()
         .setFooter({ 
-            text: 'Sky Alliance • The World\'s Leading Virtual Airline Alliance',
+            text: 'Star Alliance • The World\'s Leading Virtual Airline Alliance',
             iconURL: config.logos.star
         });
 }
@@ -18,7 +18,7 @@ function createSuccessEmbed() {
         .setColor(config.colors.success)
         .setTimestamp()
         .setFooter({ 
-            text: 'Sky Alliance • Success',
+            text: 'Star Alliance • Success',
             iconURL: config.logos.star
         });
 }
@@ -29,7 +29,7 @@ function createErrorEmbed() {
         .setColor(config.colors.error)
         .setTimestamp()
         .setFooter({ 
-            text: 'Sky Alliance • Error',
+            text: 'Star Alliance • Error',
             iconURL: config.logos.star
         });
 }
@@ -40,7 +40,7 @@ function createWarningEmbed() {
         .setColor(config.colors.warning)
         .setTimestamp()
         .setFooter({ 
-            text: 'Sky Alliance • Warning',
+            text: 'Star Alliance • Warning',
             iconURL: config.logos.star
         });
 }
@@ -51,7 +51,7 @@ function createInfoEmbed() {
         .setColor(config.colors.info)
         .setTimestamp()
         .setFooter({ 
-            text: 'Sky Alliance • Information',
+            text: 'Star Alliance • Information',
             iconURL: config.logos.star
         });
 }
@@ -63,7 +63,7 @@ function createAnnouncementEmbed() {
         .setTimestamp()
         .setThumbnail(config.logos.main)
         .setFooter({ 
-            text: 'Sky Alliance • Official Announcement',
+            text: 'Star Alliance • Official Announcement',
             iconURL: config.logos.star
         });
 }
@@ -74,7 +74,7 @@ function createXPEmbed() {
         .setColor('#FFD700')
         .setTimestamp()
         .setFooter({ 
-            text: 'Sky Alliance • XP System',
+            text: 'Star Alliance • XP System',
             iconURL: config.logos.star
         });
 }

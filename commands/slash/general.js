@@ -125,19 +125,20 @@ const slashGeneralCommands = [
             .setName('airlines')
             .setDescription('List member airlines'),
         async execute(interaction) {
+            const { ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
             const memberAirlines = await Airline.getAll();
             
             if (memberAirlines.length === 0) {
-                // Show airlines from data file (limit to 25 due to Discord embed field limit)
+                // Show airlines from data file with pagination
                 const allAirlines = Object.values(airlines);
                 const embed = createEmbed()
-                    .setTitle('✈️ Star Alliance Member Airlines')
+                    .setTitle('✈️ Star Alliance Member Airlines (Page 1/2)')
                     .setDescription('Our prestigious member carriers around the world');
                 
-                // Discord embeds can only have 25 fields maximum
-                const displayAirlines = allAirlines.slice(0, 25);
+                // Show first 25 airlines
+                const page1Airlines = allAirlines.slice(0, 25);
                 
-                displayAirlines.forEach(airline => {
+                page1Airlines.forEach(airline => {
                     embed.addFields({
                         name: `${airline.name} (${airline.iata})`,
                         value: `**Hub:** ${airline.hub}\n**Description:** ${airline.description}`,
@@ -145,17 +146,26 @@ const slashGeneralCommands = [
                     });
                 });
                 
-                const totalCount = Object.keys(airlines).length;
-                const footerText = totalCount > 25 ? 
-                    `Showing 25 of ${totalCount} total airlines available` : 
-                    `${totalCount} total airlines available`;
+                embed.setFooter({ text: `Showing 25 of ${allAirlines.length} total airlines available` });
                 
-                embed.setFooter({ text: footerText });
+                // Add Page 2 button if there are more airlines
+                if (allAirlines.length > 25) {
+                    const page2Button = new ButtonBuilder()
+                        .setCustomId('airlines_page_2')
+                        .setLabel('Page 2 →')
+                        .setStyle(ButtonStyle.Primary);
+                    
+                    const row = new ActionRowBuilder()
+                        .addComponents(page2Button);
+                    
+                    return await interaction.reply({ embeds: [embed], components: [row] });
+                }
+                
                 return await interaction.reply({ embeds: [embed] });
             }
             
             const embed = createEmbed()
-                .setTitle('✈️ Sky Alliance Member Airlines')
+                .setTitle('✈️ Star Alliance Member Airlines')
                 .setDescription('Our prestigious member carriers around the world');
             
             memberAirlines.forEach(airline => {

@@ -1,4 +1,5 @@
-// Comprehensive Sky Alliance member airlines data
+
+// Comprehensive Star Alliance member airlines data
 const airlines = {
     'united-airlines': {
         id: 'united-airlines',

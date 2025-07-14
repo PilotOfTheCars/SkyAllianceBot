@@ -132,13 +132,16 @@ const generalCommands = {
             const memberAirlines = await Airline.getAll();
             
             if (memberAirlines.length === 0) {
-                // Show all airlines from data file
+                // Show airlines from data file (limit to 25 due to Discord embed field limit)
                 const allAirlines = Object.values(airlines);
                 const embed = createEmbed()
                     .setTitle('✈️ Star Alliance Member Airlines')
                     .setDescription('Our prestigious member carriers around the world');
                 
-                allAirlines.forEach(airline => {
+                // Discord embeds can only have 25 fields maximum
+                const displayAirlines = allAirlines.slice(0, 25);
+                
+                displayAirlines.forEach(airline => {
                     embed.addFields({
                         name: `${airline.name} (${airline.iata})`,
                         value: `**Hub:** ${airline.hub}\n**Description:** ${airline.description}`,
@@ -146,7 +149,12 @@ const generalCommands = {
                     });
                 });
                 
-                embed.setFooter({ text: `${Object.keys(airlines).length} total airlines available` });
+                const totalCount = Object.keys(airlines).length;
+                const footerText = totalCount > 25 ? 
+                    `Showing 25 of ${totalCount} total airlines available` : 
+                    `${totalCount} total airlines available`;
+                
+                embed.setFooter({ text: footerText });
                 return await message.reply({ embeds: [embed] });
             }
             

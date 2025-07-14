@@ -15,6 +15,10 @@ author = "agent"
 task = "workflow.run"
 args = "Discord Bot Server"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Web Server"
+
 [[workflows.workflow]]
 name = "Discord Bot Server"
 author = "agent"
@@ -22,3 +26,16 @@ author = "agent"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "npm install discord.js sqlite3 && node index.js"
+
+[[workflows.workflow]]
+name = "Web Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node server.js"
+waitForPort = 3000
+
+[[ports]]
+localPort = 3000
+externalPort = 80

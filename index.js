@@ -1,6 +1,7 @@
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { initDatabase } = require('./config/database');
 const { loadCommands } = require('./handlers/commandHandler');
+const { registerSlashCommands } = require('./handlers/slashCommandHandler');
 const fs = require('fs');
 const path = require('path');
 
@@ -16,6 +17,7 @@ const client = new Client({
 
 // Create collections for commands
 client.commands = new Collection();
+client.slashCommands = new Collection();
 
 // Load event handlers
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
@@ -40,6 +42,11 @@ async function startBot() {
         }
         
         await client.login(token);
+        
+        // Register slash commands after bot is ready
+        client.once('ready', async () => {
+            await registerSlashCommands(client);
+        });
     } catch (error) {
         console.error('Failed to start bot:', error);
         process.exit(1);

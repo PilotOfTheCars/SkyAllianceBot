@@ -61,6 +61,8 @@ process.on('SIGINT', () => {
     client.destroy();
     process.exit(0);
 });
+
+// Express Web Server (for uptime/Render)
 const express = require('express');
 const app = express();
 
@@ -71,3 +73,4 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Web server running on port ${PORT}`);
+});

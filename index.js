@@ -19,8 +19,8 @@ const client = new Client({
 client.commands = new Collection();       // Prefix commands
 client.slashCommands = new Collection();  // Slash commands
 
-// Load event handlers from events folder (not handlers!)
-const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+// Load event handlers from events folder
+const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js') && !file.startsWith('handlers'));
 for (const file of eventFiles) {
     const event = require(`./events/${file}`);
     if (event.once) {

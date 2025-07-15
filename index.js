@@ -1,7 +1,7 @@
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { initDatabase } = require('./config/database');
-const { loadCommands } = require('./handlers/commandHandler');
-const { registerSlashCommands } = require('./handlers/slashCommandHandler');
+const { loadCommands } = require('./events/handlers/commandHandler');
+const { registerSlashCommands } = require('./events/handlers/slashCommandHandler');
 const fs = require('fs');
 const path = require('path');
 
@@ -16,10 +16,10 @@ const client = new Client({
 });
 
 // Create collections for commands
-client.commands = new Collection();
-client.slashCommands = new Collection();
+client.commands = new Collection();       // Prefix commands
+client.slashCommands = new Collection();  // Slash commands
 
-// Load event handlers
+// Load event handlers from events folder (not handlers!)
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 for (const file of eventFiles) {
     const event = require(`./events/${file}`);
@@ -37,13 +37,11 @@ async function startBot() {
         await loadCommands(client);
         
         const token = process.env.DISCORD_BOT_TOKEN;
-        if (!token) {
-            throw new Error('DISCORD_BOT_TOKEN is required');
-        }
+        if (!token) throw new Error('DISCORD_BOT_TOKEN is required');
         
         await client.login(token);
-        
-        // Register slash commands after bot is ready
+
+        // Register slash commands once the bot is ready
         client.once('ready', async () => {
             await registerSlashCommands(client);
         });
@@ -62,7 +60,7 @@ process.on('SIGINT', () => {
     process.exit(0);
 });
 
-// Express Web Server (for uptime/Render)
+// Web server for Render uptime
 const express = require('express');
 const app = express();
 

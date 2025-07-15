@@ -11,7 +11,7 @@ async function loadSlashCommands(client) {
         const commandPath = path.join('./commands/slash', folder);
         
         if (fs.statSync(commandPath).isFile() && folder.endsWith('.js')) {
-            const commands = require(`../${commandPath}`);
+            const commands = require(`../../${commandPath}`);
             
             // Handle both array and object exports
             const commandArray = Array.isArray(commands) ? commands : Object.values(commands);

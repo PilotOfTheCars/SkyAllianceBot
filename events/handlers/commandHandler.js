@@ -9,7 +9,7 @@ async function loadCommands(client) {
         const commandPath = path.join('./commands', folder);
         
         if (fs.statSync(commandPath).isFile() && folder.endsWith('.js')) {
-            const commands = require(`../${commandPath}`);
+            const commands = require(`../../${commandPath}`);
             
             for (const [name, command] of Object.entries(commands)) {
                 client.commands.set(command.name, command);

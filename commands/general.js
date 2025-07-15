@@ -31,7 +31,7 @@ const generalCommands = {
                     }
                 )
                 .setFooter({ text: 'Star Alliance • The World\'s Leading Virtual Airline Alliance' });
-            
+
             await message.reply({ embeds: [embed] });
         }
     },
@@ -62,7 +62,7 @@ const generalCommands = {
                     }
                 )
                 .setFooter({ text: 'Founded by aviation leaders within the GeoFS community' });
-            
+
             await message.reply({ embeds: [embed] });
         }
     },
@@ -88,7 +88,7 @@ const generalCommands = {
                     }
                 )
                 .setFooter({ text: 'Applications are reviewed by our admin team' });
-            
+
             await message.reply({ embeds: [embed] });
         }
     },
@@ -119,7 +119,7 @@ const generalCommands = {
                     }
                 )
                 .setFooter({ text: 'Violations may result in removal from the alliance' });
-            
+
             await message.reply({ embeds: [embed] });
         }
     },
@@ -130,17 +130,17 @@ const generalCommands = {
         usage: '!airlines',
         execute: async (message, args) => {
             const memberAirlines = await Airline.getAll();
-            
+
             if (memberAirlines.length === 0) {
                 // Show airlines from data file (limit to 25 due to Discord embed field limit)
                 const allAirlines = Object.values(airlines);
                 const embed = createEmbed()
                     .setTitle('✈️ Star Alliance Member Airlines')
                     .setDescription('Our prestigious member carriers around the world');
-                
+
                 // Discord embeds can only have 25 fields maximum
                 const displayAirlines = allAirlines.slice(0, 25);
-                
+
                 displayAirlines.forEach(airline => {
                     embed.addFields({
                         name: `${airline.name} (${airline.iata})`,
@@ -148,20 +148,20 @@ const generalCommands = {
                         inline: true
                     });
                 });
-                
+
                 const totalCount = Object.keys(airlines).length;
                 const footerText = totalCount > 25 ? 
                     `Showing 25 of ${totalCount} total airlines available` : 
                     `${totalCount} total airlines available`;
-                
+
                 embed.setFooter({ text: footerText });
                 return await message.reply({ embeds: [embed] });
             }
-            
+
             const embed = createEmbed()
                 .setTitle('✈️ Sky Alliance Member Airlines')
                 .setDescription('Our prestigious member carriers around the world');
-            
+
             memberAirlines.forEach(airline => {
                 embed.addFields({
                     name: `${airline.name} (${airline.iata_code || 'N/A'})`,
@@ -169,9 +169,9 @@ const generalCommands = {
                     inline: true
                 });
             });
-            
+
             embed.setFooter({ text: `${memberAirlines.length} member airlines` });
-            
+
             await message.reply({ embeds: [embed] });
         }
     },
@@ -182,33 +182,33 @@ const generalCommands = {
         usage: '!members',
         execute: async (message, args) => {
             const members = await User.getLeaderboard(50);
-            
+
             if (members.length === 0) {
                 const embed = createEmbed()
                     .setTitle('👥 Alliance Members')
                     .setDescription('No members registered yet.')
                     .setColor('#F59E0B');
-                
+
                 return await message.reply({ embeds: [embed] });
             }
-            
+
             const embed = createEmbed()
                 .setTitle('👥 Star Alliance Members')
                 .setDescription('Our dedicated pilots and crew members');
-            
+
             const memberList = members.slice(0, 20).map((member, index) => {
                 const airline = member.airline_id ? ` (${member.airline_id})` : '';
                 return `${index + 1}. ${member.username}${airline} - Level ${member.level}`;
             }).join('\n');
-            
+
             embed.addFields({
                 name: 'Active Members',
                 value: memberList || 'No members found',
                 inline: false
             });
-            
+
             embed.setFooter({ text: `${members.length} total members` });
-            
+
             await message.reply({ embeds: [embed] });
         }
     },
@@ -219,18 +219,18 @@ const generalCommands = {
         usage: '!hubs',
         execute: async (message, args) => {
             const allianceHubs = await Hub.getAll();
-            
+
             const embed = createEmbed()
                 .setTitle('🏢 Star Alliance Hubs')
                 .setDescription('Our shared international airport hubs worldwide');
-            
+
             if (allianceHubs.length === 0) {
                 // Show default hubs from data file
                 const defaultHubs = Object.values(hubs).slice(0, 8);
                 const hubList = defaultHubs.map(hub => 
                     `**${hub.iata}** - ${hub.name}\n${hub.city}, ${hub.country}`
                 ).join('\n\n');
-                
+
                 embed.addFields({
                     name: 'Primary Hubs',
                     value: hubList,
@@ -240,16 +240,16 @@ const generalCommands = {
                 const hubList = allianceHubs.map(hub => 
                     `**${hub.iata_code}** - ${hub.name}\n${hub.city}, ${hub.country}`
                 ).join('\n\n');
-                
+
                 embed.addFields({
                     name: 'Alliance Hubs',
                     value: hubList,
                     inline: false
                 });
             }
-            
+
             embed.setFooter({ text: 'Experience shared lounges and joint operations' });
-            
+
             await message.reply({ embeds: [embed] });
         }
     },
@@ -260,11 +260,11 @@ const generalCommands = {
         usage: '!events',
         execute: async (message, args) => {
             const upcomingEvents = await Event.getUpcoming();
-            
+
             const embed = createEmbed()
                 .setTitle('📅 Upcoming Events')
                 .setDescription('Join us for alliance-wide events and airshows');
-            
+
             if (upcomingEvents.length === 0) {
                 embed.addFields({
                     name: 'No Upcoming Events',
@@ -281,7 +281,7 @@ const generalCommands = {
                         hour: '2-digit',
                         minute: '2-digit'
                     });
-                    
+
                     embed.addFields({
                         name: event.title,
                         value: `**Date:** ${eventDate}\n**Location:** ${event.location}\n**Details:** ${event.description}`,
@@ -289,9 +289,9 @@ const generalCommands = {
                     });
                 });
             }
-            
+
             embed.setFooter({ text: 'Regular events include airshows and group flights' });
-            
+
             await message.reply({ embeds: [embed] });
         }
     },
@@ -322,7 +322,7 @@ const generalCommands = {
                     }
                 )
                 .setFooter({ text: 'Showcase your alliance membership with pride' });
-            
+
             await message.reply({ embeds: [embed] });
         }
     },
@@ -333,11 +333,11 @@ const generalCommands = {
         usage: '!codeshares',
         execute: async (message, args) => {
             const codeshares = await Codeshare.getAll();
-            
+
             const embed = createEmbed()
                 .setTitle('🤝 Alliance Codeshares')
                 .setDescription('Shared flights between member airlines');
-            
+
             if (codeshares.length === 0) {
                 embed.addFields({
                     name: 'No Codeshares Available',
@@ -348,16 +348,16 @@ const generalCommands = {
                 const codeshareList = codeshares.slice(0, 10).map(cs => 
                     `**${cs.flight_number}** (${cs.airline_iata})\n${cs.departure_airport} → ${cs.arrival_airport}\n${cs.route_description || 'No description'}`
                 ).join('\n\n');
-                
+
                 embed.addFields({
                     name: 'Active Codeshares',
                     value: codeshareList,
                     inline: false
                 });
             }
-            
+
             embed.setFooter({ text: 'Realistic flight numbers and routes' });
-            
+
             await message.reply({ embeds: [embed] });
         }
     },
@@ -377,13 +377,13 @@ const generalCommands = {
                         inline: false
                     })
                     .setColor('#F59E0B');
-                
+
                 return await message.reply({ embeds: [embed] });
             }
-            
+
             const query = args.join(' ').toUpperCase();
             const codeshare = await Codeshare.findByFlight(query);
-            
+
             if (codeshare) {
                 const embed = createEmbed()
                     .setTitle(`✈️ Flight ${codeshare.flight_number}`)
@@ -406,7 +406,7 @@ const generalCommands = {
                         }
                     )
                     .setFooter({ text: 'Star Alliance Codeshare' });
-                
+
                 await message.reply({ embeds: [embed] });
             } else {
                 const embed = createEmbed()
@@ -418,7 +418,7 @@ const generalCommands = {
                         inline: false
                     })
                     .setColor('#EF4444');
-                
+
                 await message.reply({ embeds: [embed] });
             }
         }
@@ -430,11 +430,11 @@ const generalCommands = {
         usage: '!news',
         execute: async (message, args) => {
             const latestNews = await News.getLatest();
-            
+
             const embed = createEmbed()
                 .setTitle('📰 Alliance News')
                 .setDescription('Latest updates from Star Alliance');
-            
+
             if (latestNews.length === 0) {
                 embed.addFields({
                     name: 'No News Available',
@@ -451,9 +451,9 @@ const generalCommands = {
                     });
                 });
             }
-            
+
             embed.setFooter({ text: 'Stay updated with alliance developments' });
-            
+
             await message.reply({ embeds: [embed] });
         }
     },
@@ -489,7 +489,7 @@ const generalCommands = {
                     }
                 )
                 .setFooter({ text: 'Together we fly higher' });
-            
+
             await message.reply({ embeds: [embed] });
         }
     }

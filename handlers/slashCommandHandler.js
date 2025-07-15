@@ -1,11 +1,13 @@
 // handlers/commandHandler.js
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 async function loadCommands(client) {
-  const commandsPath = path.join(__dirname, '..', 'commands');
-  const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+  const commandsPath = path.join(__dirname, "..", "commands");
+  const commandFiles = fs
+    .readdirSync(commandsPath)
+    .filter((file) => file.endsWith(".js"));
 
   client.commands = new Map();
 

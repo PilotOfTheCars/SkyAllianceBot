@@ -122,6 +122,63 @@ const slashGeneralCommands = [
     },
     {
         data: new SlashCommandBuilder()
+            .setName('apply')
+            .setDescription('Apply to join Star Alliance'),
+        async execute(interaction) {
+            const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
+            
+            const modal = new ModalBuilder()
+                .setCustomId('alliance_application')
+                .setTitle('Star Alliance Application');
+
+            const airlineNameInput = new TextInputBuilder()
+                .setCustomId('airline_name')
+                .setLabel('Airline Name')
+                .setStyle(TextInputStyle.Short)
+                .setRequired(true)
+                .setPlaceholder('Enter your airline name');
+
+            const airlineCodeInput = new TextInputBuilder()
+                .setCustomId('airline_code')
+                .setLabel('Airline Code (IATA/ICAO)')
+                .setStyle(TextInputStyle.Short)
+                .setRequired(true)
+                .setPlaceholder('e.g., AA/AAL');
+
+            const hubInput = new TextInputBuilder()
+                .setCustomId('hub')
+                .setLabel('Primary Hub')
+                .setStyle(TextInputStyle.Short)
+                .setRequired(true)
+                .setPlaceholder('e.g., New York JFK (JFK)');
+
+            const experienceInput = new TextInputBuilder()
+                .setCustomId('experience')
+                .setLabel('Aviation Experience')
+                .setStyle(TextInputStyle.Paragraph)
+                .setRequired(true)
+                .setPlaceholder('Describe your aviation experience and why you want to join Star Alliance');
+
+            const contactInput = new TextInputBuilder()
+                .setCustomId('contact')
+                .setLabel('Contact Information')
+                .setStyle(TextInputStyle.Short)
+                .setRequired(true)
+                .setPlaceholder('Email or other contact method');
+
+            const firstActionRow = new ActionRowBuilder().addComponents(airlineNameInput);
+            const secondActionRow = new ActionRowBuilder().addComponents(airlineCodeInput);
+            const thirdActionRow = new ActionRowBuilder().addComponents(hubInput);
+            const fourthActionRow = new ActionRowBuilder().addComponents(experienceInput);
+            const fifthActionRow = new ActionRowBuilder().addComponents(contactInput);
+
+            modal.addComponents(firstActionRow, secondActionRow, thirdActionRow, fourthActionRow, fifthActionRow);
+
+            await interaction.showModal(modal);
+        }
+    },
+    {
+        data: new SlashCommandBuilder()
             .setName('airlines')
             .setDescription('List member airlines'),
         async execute(interaction) {

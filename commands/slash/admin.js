@@ -22,10 +22,10 @@ const slashAdminCommands = [
             if (!hasAdminPermission(interaction.member)) {
                 return await interaction.reply({ content: '❌ You need administrator permissions to use this command.', ephemeral: true });
             }
-            
+
             const targetUser = interaction.options.getUser('user');
             const amount = interaction.options.getInteger('amount');
-            
+
             let user = await User.findById(targetUser.id);
             if (!user) {
                 user = await User.create({
@@ -34,10 +34,10 @@ const slashAdminCommands = [
                     discriminator: targetUser.discriminator
                 });
             }
-            
+
             const newXP = Math.max(0, user.xp + amount);
             const updatedUser = await User.updateXP(targetUser.id, newXP);
-            
+
             const embed = createEmbed()
                 .setTitle('✅ XP Updated')
                 .setDescription(`Successfully ${amount >= 0 ? 'added' : 'removed'} ${Math.abs(amount)} XP`)
@@ -59,7 +59,7 @@ const slashAdminCommands = [
                     }
                 )
                 .setColor('#10B981');
-            
+
             await interaction.reply({ embeds: [embed] });
         }
     },
@@ -67,64 +67,48 @@ const slashAdminCommands = [
         data: new SlashCommandBuilder()
             .setName('approve')
             .setDescription('Approve an application')
-            .addIntegerOption(option =>
-                option.setName('application_id')
-                    .setDescription('Application ID to approve')
+            .addUserOption(option =>
+                option.setName('user')
+                    .setDescription('User to approve')
                     .setRequired(true))
+            .addStringOption(option =>
+                option.setName('reason')
+                    .setDescription('Reason for approval')
+                    .setRequired(false))
             .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
         async execute(interaction) {
+            const { hasAdminPermission } = require('../../utils/permissions');
+
             if (!hasAdminPermission(interaction.member)) {
                 return await interaction.reply({ content: '❌ You need administrator permissions to use this command.', ephemeral: true });
             }
-            
-            const applicationId = interaction.options.getInteger('application_id');
-            
-            const application = await Application.updateStatus(applicationId, 'approved', interaction.user.id);
-            
-            if (!application) {
-                const embed = createEmbed()
-                    .setTitle('❌ Application Not Found')
-                    .setDescription(`No application found with ID ${applicationId}.`)
-                    .setColor('#EF4444');
-                
-                return await interaction.reply({ embeds: [embed] });
+
+            const targetUser = interaction.options.getUser('user');
+            const reason = interaction.options.getString('reason') || 'No reason provided';
+
+            // Find application by user ID
+            if (global.applications) {
+                for (const [code, app] of global.applications.entries()) {
+                    if (app.userId === targetUser.id && app.status === 'pending') {
+                        app.status = 'approved';
+                        app.approvedBy = interaction.user.username;
+                        app.approvedAt = new Date().toISOString();
+                        app.reason = reason;
+                        break;
+                    }
+                }
             }
-            
-            // Create airline entry
-            const airlineId = application.airline_name.toLowerCase().replace(/\s+/g, '-');
-            await Airline.create({
-                id: airlineId,
-                name: application.airline_name,
-                iata_code: application.iata_code,
-                icao_code: application.icao_code,
-                description: application.description
-            });
-            
-            // Assign airline to user
-            await User.setAirline(application.user_id, airlineId);
-            
+
             const embed = createEmbed()
                 .setTitle('✅ Application Approved')
-                .setDescription(`Successfully approved application for ${application.airline_name}`)
-                .addFields(
-                    {
-                        name: 'Airline',
-                        value: application.airline_name,
-                        inline: true
-                    },
-                    {
-                        name: 'Codes',
-                        value: `${application.iata_code || 'N/A'} / ${application.icao_code || 'N/A'}`,
-                        inline: true
-                    },
-                    {
-                        name: 'Status',
-                        value: 'Approved and airline created',
-                        inline: true
-                    }
-                )
+                .setDescription(`${targetUser.username}'s application has been approved!`)
+                .addFields({
+                    name: 'Reason',
+                    value: reason,
+                    inline: false
+                })
                 .setColor('#10B981');
-            
+
             await interaction.reply({ embeds: [embed] });
         }
     },
@@ -132,39 +116,48 @@ const slashAdminCommands = [
         data: new SlashCommandBuilder()
             .setName('reject')
             .setDescription('Reject an application')
-            .addIntegerOption(option =>
-                option.setName('application_id')
-                    .setDescription('Application ID to reject')
+            .addUserOption(option =>
+                option.setName('user')
+                    .setDescription('User to reject')
                     .setRequired(true))
+            .addStringOption(option =>
+                option.setName('reason')
+                    .setDescription('Reason for rejection')
+                    .setRequired(false))
             .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
         async execute(interaction) {
+            const { hasAdminPermission } = require('../../utils/permissions');
+
             if (!hasAdminPermission(interaction.member)) {
                 return await interaction.reply({ content: '❌ You need administrator permissions to use this command.', ephemeral: true });
             }
-            
-            const applicationId = interaction.options.getInteger('application_id');
-            
-            const application = await Application.updateStatus(applicationId, 'rejected', interaction.user.id);
-            
-            if (!application) {
-                const embed = createEmbed()
-                    .setTitle('❌ Application Not Found')
-                    .setDescription(`No application found with ID ${applicationId}.`)
-                    .setColor('#EF4444');
-                
-                return await interaction.reply({ embeds: [embed] });
+
+            const targetUser = interaction.options.getUser('user');
+            const reason = interaction.options.getString('reason') || 'No reason provided';
+
+            // Find application by user ID
+            if (global.applications) {
+                for (const [code, app] of global.applications.entries()) {
+                    if (app.userId === targetUser.id && app.status === 'pending') {
+                        app.status = 'rejected';
+                        app.rejectedBy = interaction.user.username;
+                        app.rejectedAt = new Date().toISOString();
+                        app.reason = reason;
+                        break;
+                    }
+                }
             }
-            
+
             const embed = createEmbed()
                 .setTitle('❌ Application Rejected')
-                .setDescription(`Application for ${application.airline_name} has been rejected.`)
+                .setDescription(`${targetUser.username}'s application has been rejected.`)
                 .addFields({
-                    name: 'Airline',
-                    value: application.airline_name,
-                    inline: true
+                    name: 'Reason',
+                    value: reason,
+                    inline: false
                 })
                 .setColor('#EF4444');
-            
+
             await interaction.reply({ embeds: [embed] });
         }
     },
@@ -181,22 +174,22 @@ const slashAdminCommands = [
             if (!hasAdminPermission(interaction.member)) {
                 return await interaction.reply({ content: '❌ You need administrator permissions to use this command.', ephemeral: true });
             }
-            
+
             const targetUser = interaction.options.getUser('user');
-            
+
             const user = await User.findById(targetUser.id);
             if (!user) {
                 const embed = createEmbed()
                     .setTitle('❌ User Not Found')
                     .setDescription(`${targetUser.username} is not registered in the alliance.`)
                     .setColor('#EF4444');
-                
+
                 return await interaction.reply({ embeds: [embed] });
             }
-            
+
             // Remove user's airline assignment
             await User.setAirline(targetUser.id, null);
-            
+
             const embed = createEmbed()
                 .setTitle('✅ Member Removed')
                 .setDescription(`${targetUser.username} has been removed from the alliance.`)
@@ -206,7 +199,7 @@ const slashAdminCommands = [
                     inline: true
                 })
                 .setColor('#EF4444');
-            
+
             await interaction.reply({ embeds: [embed] });
         }
     },
@@ -223,16 +216,16 @@ const slashAdminCommands = [
             if (!hasAdminPermission(interaction.member)) {
                 return await interaction.reply({ content: '❌ You need administrator permissions to use this command.', ephemeral: true });
             }
-            
+
             const announcement = interaction.options.getString('message');
-            
+
             // Create news entry
             await News.create({
                 title: 'Alliance Announcement',
                 content: announcement,
                 author: interaction.user.username
             });
-            
+
             const embed = createEmbed()
                 .setTitle('📢 OFFICIAL SKY ALLIANCE ANNOUNCEMENT')
                 .setDescription(announcement)
@@ -261,10 +254,10 @@ const slashAdminCommands = [
                 .setColor('#3B82F6')
                 .setThumbnail(config.logos.main)
                 .setFooter({ text: 'Sky Alliance • Official Communication • The World\'s Leading Virtual Airline Alliance' });
-            
+
             // Send to specific announcement channel
             const announcementChannel = interaction.guild.channels.cache.get('1394220009001193595');
-            
+
             if (announcementChannel) {
                 await announcementChannel.send({ 
                     content: '@everyone', 
@@ -293,10 +286,10 @@ const slashAdminCommands = [
             if (!hasAdminPermission(interaction.member)) {
                 return await interaction.reply({ content: '❌ You need administrator permissions to use this command.', ephemeral: true });
             }
-            
+
             const targetUser = interaction.options.getUser('user');
             const airlineId = interaction.options.getString('airline_id');
-            
+
             let user = await User.findById(targetUser.id);
             if (!user) {
                 user = await User.create({
@@ -305,19 +298,19 @@ const slashAdminCommands = [
                     discriminator: targetUser.discriminator
                 });
             }
-            
+
             const airline = await Airline.findById(airlineId);
             if (!airline) {
                 const embed = createEmbed()
                     .setTitle('❌ Airline Not Found')
                     .setDescription(`No airline found with ID "${airlineId}".`)
                     .setColor('#EF4444');
-                
+
                 return await interaction.reply({ embeds: [embed] });
             }
-            
+
             await User.setAirline(targetUser.id, airlineId);
-            
+
             const embed = createEmbed()
                 .setTitle('✅ Airline Assigned')
                 .setDescription(`Successfully assigned ${targetUser.username} to ${airline.name}`)
@@ -339,7 +332,7 @@ const slashAdminCommands = [
                     }
                 )
                 .setColor('#10B981');
-            
+
             await interaction.reply({ embeds: [embed] });
         }
     },
@@ -372,13 +365,13 @@ const slashAdminCommands = [
             if (!hasAdminPermission(interaction.member)) {
                 return await interaction.reply({ content: '❌ You need administrator permissions to use this command.', ephemeral: true });
             }
-            
+
             const iataCode = interaction.options.getString('iata_code').toUpperCase();
             const name = interaction.options.getString('name');
             const city = interaction.options.getString('city');
             const country = interaction.options.getString('country');
             const icaoCode = interaction.options.getString('icao_code')?.toUpperCase();
-            
+
             try {
                 const hub = await Hub.create({
                     iata_code: iataCode,
@@ -387,7 +380,7 @@ const slashAdminCommands = [
                     city: city,
                     country: country
                 });
-                
+
                 const embed = createEmbed()
                     .setTitle('✅ Hub Added')
                     .setDescription(`Successfully added ${name} as a Sky Alliance hub`)
@@ -409,16 +402,57 @@ const slashAdminCommands = [
                         }
                     )
                     .setColor('#10B981');
-                
+
                 await interaction.reply({ embeds: [embed] });
             } catch (error) {
                 const embed = createEmbed()
                     .setTitle('❌ Error Adding Hub')
                     .setDescription(`Failed to add hub: ${error.message}`)
                     .setColor('#EF4444');
-                
+
                 await interaction.reply({ embeds: [embed] });
             }
+        }
+    },
+    {
+        data: new SlashCommandBuilder()
+            .setName('viewapp')
+            .setDescription('View an application by code')
+            .addStringOption(option =>
+                option.setName('code')
+                    .setDescription('Application code')
+                    .setRequired(true)
+            ),
+        async execute(interaction) {
+            const { hasAdminPermission } = require('../../utils/permissions');
+
+            if (!hasAdminPermission(interaction.member)) {
+                return await interaction.reply({ content: '❌ You need administrator permissions to use this command.', ephemeral: true });
+            }
+
+            const code = interaction.options.getString('code').toUpperCase();
+
+            if (!global.applications || !global.applications.has(code)) {
+                return await interaction.reply({ content: '❌ Application not found.', ephemeral: true });
+            }
+
+            const app = global.applications.get(code);
+            const embed = createEmbed()
+                .setTitle(`📋 Application ${code}`)
+                .setDescription(`Application details for review`)
+                .addFields(
+                    { name: 'Applicant', value: `<@${app.userId}> (${app.username})`, inline: true },
+                    { name: 'Status', value: app.status, inline: true },
+                    { name: 'Submitted', value: new Date(app.submittedAt).toLocaleDateString(), inline: true },
+                    { name: 'Airline Name', value: app.airlineName, inline: true },
+                    { name: 'Airline Code', value: app.airlineCode, inline: true },
+                    { name: 'Hub', value: app.hub, inline: true },
+                    { name: 'Contact', value: app.contact, inline: false },
+                    { name: 'Experience', value: app.experience, inline: false }
+                )
+                .setColor(app.status === 'pending' ? '#F59E0B' : app.status === 'approved' ? '#10B981' : '#EF4444');
+
+            await interaction.reply({ embeds: [embed] });
         }
     },
     {
@@ -450,23 +484,23 @@ const slashAdminCommands = [
             if (!hasAdminPermission(interaction.member)) {
                 return await interaction.reply({ content: '❌ You need administrator permissions to use this command.', ephemeral: true });
             }
-            
+
             const flightNumber = interaction.options.getString('flight_number').toUpperCase();
             const airlineId = interaction.options.getString('airline_id');
             const departure = interaction.options.getString('departure').toUpperCase();
             const arrival = interaction.options.getString('arrival').toUpperCase();
             const description = interaction.options.getString('description');
-            
+
             const airline = await Airline.findById(airlineId);
             if (!airline) {
                 const embed = createEmbed()
                     .setTitle('❌ Airline Not Found')
                     .setDescription(`No airline found with ID "${airlineId}".`)
                     .setColor('#EF4444');
-                
+
                 return await interaction.reply({ embeds: [embed] });
             }
-            
+
             try {
                 const codeshare = await Codeshare.create({
                     flight_number: flightNumber,
@@ -475,7 +509,7 @@ const slashAdminCommands = [
                     arrival_airport: arrival,
                     route_description: description
                 });
-                
+
                 const embed = createEmbed()
                     .setTitle('✅ Codeshare Added')
                     .setDescription(`Successfully added codeshare route ${flightNumber}`)
@@ -497,14 +531,14 @@ const slashAdminCommands = [
                         }
                     )
                     .setColor('#10B981');
-                
+
                 await interaction.reply({ embeds: [embed] });
             } catch (error) {
                 const embed = createEmbed()
                     .setTitle('❌ Error Adding Codeshare')
                     .setDescription(`Failed to add codeshare: ${error.message}`)
                     .setColor('#EF4444');
-                
+
                 await interaction.reply({ embeds: [embed] });
             }
         }

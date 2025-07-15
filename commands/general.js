@@ -124,6 +124,25 @@ const generalCommands = {
         }
     },
 
+    apply: {
+        name: 'apply',
+        description: 'Apply to join Star Alliance',
+        usage: '!apply',
+        execute: async (message, args) => {
+            const embed = createEmbed()
+                .setTitle('📋 Star Alliance Application')
+                .setDescription('To apply for Star Alliance membership, please use the slash command version of this command for a better experience.')
+                .addFields({
+                    name: 'How to Apply',
+                    value: 'Use `/apply` to open the application form',
+                    inline: false
+                })
+                .setColor('#3B82F6');
+
+            await message.reply({ embeds: [embed] });
+        }
+    },
+
     airlines: {
         name: 'airlines',
         description: 'List member airlines',
